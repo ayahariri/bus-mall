@@ -53,7 +53,7 @@ var imageSection = document.getElementById('imageSection');
 var leftItems, centerProducts, rightProducts;
 var random1 = 0, random2 = 0, random3 = 0;
 var round = 0;
-var sessionLength = 10;
+var sessionLength = 25;
 var sessionEnd = false;
 
 //var malls = []; // array for selling items
