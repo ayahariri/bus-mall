@@ -1,4 +1,4 @@
-'user strict'
+//'user strict'//
 
 var products = [
     "bag",
@@ -56,7 +56,6 @@ var round = 0;
 var sessionLength = 25;
 var sessionEnd = false;
 
-
 //var malls = []; // array for selling items
 Mall.all = [];
 
@@ -67,7 +66,6 @@ function Mall(mItems, imagePath) {
     this.clicks = 0;
     Mall.all.push(this);
 }
-
 function render(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -76,6 +74,9 @@ function render(min, max) {
 function createItem() {
     for (var i = 0; i < products.length; i++) {
         new Mall(products[i], path[i]);
+        // localStorage.setItem('productsArr',JSON.stringify(Mall.all))
+        // localStorage.setItem('numberOfClicks',JSON.stringify(Mall.all))
+
     }
 }
 
@@ -83,20 +84,20 @@ function randomRender() {
     // random1 = 0;
     // random2 = 0;
     // random3 = 0;
-    var randomNew= [random1,random2, random3]
+    var randomNew = [random1, random2, random3]
 
-    do{
+    do {
         random1 = render(0, products.length - 1);
-} while (randomNew.includes(random1))
-randomNew.push(random1);
-do{
-    random2 = render(0, products.length - 1);
-} while (randomNew.includes(random2))
-randomNew.push(random2);
-do{
-    random3 = render(0, products.length - 1);
-} while (randomNew.includes(random3))
-randomNew.push(random3);
+    } while (randomNew.includes(random1))
+    randomNew.push(random1);
+    do {
+        random2 = render(0, products.length - 1);
+    } while (randomNew.includes(random2))
+    randomNew.push(random2);
+    do {
+        random3 = render(0, products.length - 1);
+    } while (randomNew.includes(random3))
+    randomNew.push(random3);
 
     // do {
     //     random1 = render(0, products.length - 1);
@@ -104,7 +105,7 @@ randomNew.push(random3);
     //     random3 = render(0, products.length - 1);
     //     randomNew = render(0, products.length -1);
     // } while (random1 === random2 || random1 === random3 || random2 === random3 && randomNew != ramdom1);
-    
+
 
 
     leftImg.src = `images/${products[random1]}.${path[random1]}`;
@@ -128,60 +129,64 @@ function allResults() {
     }
 }
 
-
+var totalClicks = [];
+var totalViews = [];
+var fillDataSet = [];
 function fillData() {
-    totalClicks = [];
-    totalViews = [];
-    fillDataSet = [];
+    // totalClicks = [];
+    // totalViews = [];
+    // fillDataSet = [];
     for (var i = 0; i < Mall.all.length; i++) {
         totalClicks.push(Mall.all[i].clicks);
         totalViews.push(Mall.all[i].views);
-        fillDataSet.push(Mall.all[i].views*Mall.all[i].clicks);
+        fillDataSet.push(Mall.all[i].views * Mall.all[i].clicks);
+
     }
 }
 console.log(fillData);
 
-function renderChart(){
+function renderChart() {
     fillData();
-
-
-
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',  
-    data: {
-        labels: products,
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: products,
             label: '# of Votes',
             datasets: [
-            {
-                label:'clicks',
-                backgroundColor: 'rgb(183,43,101)',
-                borderColor: 'rgb(23,43,97)',
-                data: totalClicks
-            },
-            {
-                label:'views',
-                backgroundColor: 'rgb(03,12,127)',
-                borderColor: 'rgb(63,33,95)',
-                data: totalViews
-            }
+                {
+                    label: 'clicks',
+                    backgroundColor: 'rgb(183,43,101)',
+                    borderColor: 'rgb(23,43,97)',
+                    data: totalClicks
+                },
+                {
+                    label: 'views',
+                    backgroundColor: 'rgb(03,12,127)',
+                    borderColor: 'rgb(63,33,95)',
+                    data: totalViews
+                }
             ],
 
 
         }
+    }
+    );
 }
-);
-}
+
 function handleClick(event) {
     if (round < sessionLength) {
         leftItems.views += 1;
         centerProducts.views += 1;
         rightProducts.views += 1;
+        setToLocalStorage();
+        setTotal();
         if (event.target.id == 'leftImage') {
             leftItems.clicks += 1;
             round += 1;
             randomRender();
         }
+
         else if (event.target.id == 'centerImage') {
             centerProducts.clicks += 1;
             round += 1;
@@ -191,6 +196,7 @@ function handleClick(event) {
             rightProducts.clicks += 1;
             round += 1;
             randomRender();
+
         } else { }
     }
     else { allResults(); renderChart(); }
@@ -198,3 +204,35 @@ function handleClick(event) {
 imageSection.addEventListener('click', handleClick);
 createItem();
 randomRender();
+
+function setToLocalStorage() {
+    var totalClick = JSON.stringify(Mall.all);
+    localStorage.setItem('productsArr', totalClick);
+}
+function getFromLocalStorage() {
+    var totalProduct = localStorage.getItem('productsArr');
+    var ProductAll = JSON.parse(totalProduct);
+    if (ProductAll) {
+        Mall.all = ProductAll
+    }
+
+}
+getFromLocalStorage();
+function setTotal() {
+    // fillData();
+    var setTotalNumber = JSON.stringify(sessionLength);
+    localStorage.setItem('totalProducts', setTotalNumber);
+}
+function getTotal() {
+    fillData();
+    var getTotalNumber = localStorage.getItem('totalProducts');
+    var ProductTotalNumber = JSON.parse(getTotalNumber);
+    if (ProductTotalNumber) {
+        //     for(var i=0; i<totalClicks.length; i++){
+        sessionLength = ProductTotalNumber
+    }
+    //     }
+    // }
+
+}
+getTotal();
