@@ -74,8 +74,8 @@ function render(min, max) {
 function createItem() {
     for (var i = 0; i < products.length; i++) {
         new Mall(products[i], path[i]);
-    // localStorage.setItem('productsArr',JSON.stringify(Mall.all))
-    // localStorage.setItem('numberOfClicks',JSON.stringify(Mall.all))
+        // localStorage.setItem('productsArr',JSON.stringify(Mall.all))
+        // localStorage.setItem('numberOfClicks',JSON.stringify(Mall.all))
 
     }
 }
@@ -147,9 +147,6 @@ console.log(fillData);
 
 function renderChart() {
     fillData();
-
-
-
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -189,7 +186,7 @@ function handleClick(event) {
             round += 1;
             randomRender();
         }
-        
+
         else if (event.target.id == 'centerImage') {
             centerProducts.clicks += 1;
             round += 1;
@@ -208,31 +205,31 @@ imageSection.addEventListener('click', handleClick);
 createItem();
 randomRender();
 
-function setToLocalStorage(){
+function setToLocalStorage() {
     var totalClick = JSON.stringify(Mall.all);
     localStorage.setItem('productsArr', totalClick);
 }
-function getFromLocalStorage (){
+function getFromLocalStorage() {
     var totalProduct = localStorage.getItem('productsArr');
     var ProductAll = JSON.parse(totalProduct);
-    if(ProductAll){
-        Mall.all=ProductAll
+    if (ProductAll) {
+        Mall.all = ProductAll
     }
 
 }
 getFromLocalStorage();
-function setTotal(){
+function setTotal() {
     // fillData();
     var setTotalNumber = JSON.stringify(sessionLength);
     localStorage.setItem('totalProducts', setTotalNumber);
 }
-function getTotal (){
+function getTotal() {
     fillData();
     var getTotalNumber = localStorage.getItem('totalProducts');
     var ProductTotalNumber = JSON.parse(getTotalNumber);
-    if(ProductTotalNumber){
-    //     for(var i=0; i<totalClicks.length; i++){
-     sessionLength=ProductTotalNumber
+    if (ProductTotalNumber) {
+        //     for(var i=0; i<totalClicks.length; i++){
+        sessionLength = ProductTotalNumber
     }
     //     }
     // }
